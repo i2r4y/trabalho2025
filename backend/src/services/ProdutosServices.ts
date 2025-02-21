@@ -1,34 +1,32 @@
 import prismaClient from "../prisma";
- 
+
 interface ProdutosCliente {
     nome: string,
     descricao: string,
     preco: string,
-    dataAdicao: string,
-    categoriasId: string,
-    estoqueId: string
+    banner: string,
 }
 
-class ProdutosServices{
+class ProdutosServices {
     async cadastro_produtos({
         nome,
         descricao,
         preco,
-        dataAdicao,
-        categoriasId,
-        estoqueId
-    }:ProdutosCliente){
+        banner,
+
+
+    }: ProdutosCliente) {
         const resposta = await prismaClient.produtos.create({
-            data:{
+            data: {
                 nome,
                 descricao,
                 preco,
-                dataAdicao,
-                categoriasId,
-                estoqueId
+                banner,
+
+
             }
         })
         return { dados: "Cadastro Efetuado Com Sucesso" };
     }
 }
-export {ProdutosServices}
+export { ProdutosServices }

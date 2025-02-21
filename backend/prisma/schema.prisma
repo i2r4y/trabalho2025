@@ -26,15 +26,15 @@ model CadastrarUsuarios {
 }
 
 model Produtos {
-  id           String     @id @default(uuid())
-  nome         String
-  descricao    String
-  preco        String
-  dataAdicao   String     @map("data_adicao")
-  categorias   Categorias @relation(fields: [categoriasId], references: [id])
-  categoriasId String
-  estoque      Estoque    @relation(fields: [estoqueId], references: [id])
-  estoqueId    String
+  id         String @id @default(uuid())
+  nome       String
+  descricao  String
+  preco      String
+  banner     String
+
+  data_criacao   DateTime @default(now())
+  data_alteracao DateTime @updatedAt
+
 
   Carrinho Carrinho[]
 
@@ -65,17 +65,15 @@ model Vendas {
 }
 
 model Categorias {
-  id            String     @id @default(uuid())
-  nomeCategoria String     @map("nome_categoria")
-  Produtos      Produtos[]
+  id            String @id @default(uuid())
+  nomeCategoria String @map("nome_categoria")
 
   @@map("categorias")
 }
 
 model Estoque {
-  id         String     @id @default(uuid())
+  id         String @id @default(uuid())
   quantidade String
-  Produtos   Produtos[]
 
   @@map("estoque")
 }
