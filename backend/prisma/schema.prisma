@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./db.dev"
+}
+
+model CadastrarUsuarios {
+  id             String     @id @default(uuid())
+  nome           String
+  email          String
+  password       String
+  data_criacao   DateTime   @default(now())
+  data_alteracao DateTime   @updatedAt
+  Carrinho       Carrinho[]
+
+  @@map("cadastro_usuarios")
+}
+
+model Produtos {
+  id        String  @id @default(uuid())
+  nome      String
+  descricao String
+  preco     String
+  image     Image[]
+
+  data_criacao   DateTime @default(now())
+  data_alteracao DateTime @updatedAt
+
+  Carrinho Carrinho[]
+
+  @@map("produtos")
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  path      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Produtos   Produtos? @relation(fields: [produtosId], references: [id], onDelete: Cascade)
+  produtosId String?
+
+  @@map("image")
+}
+
+model Carrinho {
+  id            String            @id @default(uuid())
+  quantidade    String
+  precoUnitario String            @map("preco_unitario")
+  produtos      Produtos          @relation(fields: [produtosId], references: [id])
+  produtosId    String
+  vendas        Vendas            @relation(fields: [vendasId], references: [id])
+  vendasId      String
+  cliente       CadastrarUsuarios @relation(fields: [clientesId], references: [id])
+  clientesId    String
+
+  @@map("carrinho")
+}
+
+model Endereco {
+  id          String @id @default(uuid())
+  rua         String
+  telefone    String
+  numero      String
+  bairro      String
+  cidade      String
+  cep         String
+  complemento String?
+
+  @@map("endereco")
+}
+
+model Vendas {
+  id         String     @id @default(uuid())
+  valorTotal String     @map("valor_total")
+  DataVenda  String     @map("data_venda")
+  Carrinho   Carrinho[]
+
+  @@map("vendas")
+}
+
+model Categorias {
+  id            String @id @default(uuid())
+  nomeCategoria String @map("nome_categoria")
+
+  @@map("categorias")
+}
+
+model Estoque {
+  id         String @id @default(uuid())
+  quantidade String
+
+  @@map("estoque")
+}
